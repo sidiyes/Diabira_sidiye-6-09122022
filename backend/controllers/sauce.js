@@ -50,8 +50,6 @@ exports.getAllSauces = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
   
-    //delete sauceObject._userId;
-    //Crée une instance "Sauce" à partir de "sauceObject"
     Sauce.findOne({_id: req.params.id})
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
