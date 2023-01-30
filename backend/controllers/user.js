@@ -1,11 +1,16 @@
+//Utiliser pour chiffrer les données
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
+//Utiliser pour vérifier les tokens d'authentification
 const jwt = require('jsonwebtoken');
+
+const User = require('../models/user');
+
 
 
 
 exports.signup = (req, res, next) => {
     console.log(req.body)
+    //hasher les mots de passe 10 fois
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
@@ -36,6 +41,7 @@ exports.login = (req, res, next) => {
                         token: jwt.sign(
                             { userId: user._id },
                             process.env.TOKEN,
+                            //Durée de validité et demande de reconnection au bout de 24h
                             { expiresIn: '24h' }
                         )
                     });

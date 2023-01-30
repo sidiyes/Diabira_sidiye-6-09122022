@@ -7,9 +7,7 @@ const jwt = require("jsonwebtoken");
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
 
-  // delete sauceObject._id;
-
-  //GESTION DE L'IMAGE
+  
   if (req.file) {
     const sauce = new Sauce({
       ...sauceObject,
@@ -107,7 +105,7 @@ exports.like = (req, res, next) => {
           sauce.usersDisliked.includes(req.body.userId) ||
           sauce.usersLiked.includes(req.body.userId)
         ) {
-          res.status(401).json({ message: "Opération non autorisée !" });
+          res.status(401).json({ message: "Not authorized" });
         } else {
           Sauce.updateOne(
             { _id: req.params.id },
@@ -129,7 +127,7 @@ exports.like = (req, res, next) => {
           sauce.usersDisliked.includes(req.body.userId) ||
           sauce.usersLiked.includes(req.body.userId)
         ) {
-          res.status(401).json({ message: "Opération non autorisée !" });
+          res.status(401).json({ message: "Not authorized" });
         } else {
           Sauce.updateOne(
             { _id: req.params.id },
@@ -156,7 +154,7 @@ exports.like = (req, res, next) => {
               $inc: { likes: -1 },
             }
           )
-            .then(() => res.status(200).json({ message: "J'aime retiré !" }))
+            .then(() => res.status(200).json({ message: "j'aime retiré !" }))
             .catch((error) => res.status(400).json({ error }));
         }
         if (sauce.usersDisliked.includes(req.body.userId)) {
