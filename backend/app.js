@@ -1,24 +1,13 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
-const rateLimit = require('express-rate-limit');
 const helmet = require("helmet");
 const path = require('path');
-
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
-
 const app = express();
-
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	max: 100,
-	standardHeaders: true,
-	legacyHeaders: false,
-})
-
 
  mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.HOST}${process.env.DATABASE}?retryWrites=true&w=majority`,
   { useNewUrlParser: true,
@@ -38,7 +27,6 @@ app.use(express.json());
 
 
 
-app.use(limiter)
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
