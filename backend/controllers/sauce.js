@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
 
-  
   if (req.file) {
     const sauce = new Sauce({
       ...sauceObject,
@@ -34,7 +33,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(404).json({ error }));
 };
 
 exports.modifySauce = (req, res, next) => {
@@ -62,11 +61,11 @@ exports.modifySauce = (req, res, next) => {
           { ...sauceObject, _id: req.params.id }
         )
           .then(() => res.status(200).json({ message: "Objet modifié!" }))
-          .catch((error) => res.status(401).json({ error }));
+          .catch((error) => res.status(400).json({ error }));
       }
     })
     .catch((error) => {
-      res.status(400).json({ error });
+      res.status(404).json({ error });
     });
 };
 
@@ -76,24 +75,20 @@ exports.deleteSauce = (req, res, next) => {
       if (sauce.userId != req.auth.userId) {
         res.status(401).json({ message: "Not authorized" });
       } else {
-        //Séparation du nom du fichier grâce au "/images/"" contenu dans l'url
         const filename = sauce.imageUrl.split("/images/")[1];
-        //Utilisation de la fonction unlink pour supprimer l'image et suppression de toute la Sauce
         fs.unlink(`images/${filename}`, () => {
           Sauce.deleteOne({ _id: req.params.id })
             .then(() => {
               res.status(200).json({ message: "Objet supprimé !" });
             })
-            .catch((error) => res.status(401).json({ error }));
+            .catch((error) => res.status(400).json({ error }));
         });
       }
     })
     .catch((error) => {
-      res.status(500).json({ error });
+      res.status(404).json({ error });
     });
 };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 exports.like = (req, res, next) => {
   const like = req.body.like;
