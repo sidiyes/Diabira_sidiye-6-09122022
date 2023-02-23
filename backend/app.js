@@ -25,9 +25,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-
-
-
 //Gère la ressource "images" de manière statique à chaque fois qu'elle reçoit une requête vers la route "/images"
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
